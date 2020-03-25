@@ -11,6 +11,7 @@ class LRUCache:
     def __init__(self, limit=10):
         self.storage = DoublyLinkedList()
         self.limit = limit
+        self.hashTable = {}
 
     """
     Retrieves the value associated with the given key. Also
@@ -19,14 +20,22 @@ class LRUCache:
     Returns the value associated with the key or None if the
     key-value pair doesn't exist in the cache.
     """
+    # def get(self, key):
+    #     node = self.storage.head
+    #     while node != None:
+    #         if list(node.value.keys())[0] == key:
+    #             self.storage.move_to_front(node) # Most recently used, move to front
+    #             return node.value[key]
+    #         else:
+    #             node = node.next
+        
+    #     # key does not exist
+    #     return None
+
     def get(self, key):
-        node = self.storage.head
-        while node != None:
-            if list(node.value.keys())[0] == key:
-                self.storage.move_to_front(node) # Most recently used, move to front
-                return node.value[key]
-            else:
-                node = node.next
+        if key in self.hashTable:
+            self.storage.move_to_front(self.hashTable[key]) # Most recently used, move to front
+            return self.hashTable[key].value[key]
         
         # key does not exist
         return None
@@ -45,18 +54,36 @@ class LRUCache:
     def set(self, key, value):
 
         #  If the key-value is already in the storage, change the value
-        node = self.storage.head
-        while node != None:
-            if list(node.value.keys())[0] == key:
-                node.value[key] = value
-                self.storage.move_to_front(node) # Most recently used, move to front
-                return
-            else:
-                node = node.next
+        if key in self.hashTable:
+            self.hashTable[key].value = {key : value}
+            self.storage.move_to_front(self.hashTable[key]) # Most recently used, move to front
+            return
 
         # If the cache is already at the limit, delete the least recently used (tail)
         if self.storage.length >= self.limit:
+            k = list(self.storage.tail.value.keys())[0]
+            del self.hashTable[k]
             self.storage.remove_from_tail()
         
         # Add the key-value to the front of the storage
-        self.storage.add_to_head({key : value})
+        self.hashTable[key] = self.storage.add_to_head({key : value})
+
+
+    # def set(self, key, value):
+
+    #     #  If the key-value is already in the storage, change the value
+    #     node = self.storage.head
+    #     while node != None:
+    #         if list(node.value.keys())[0] == key:
+    #             node.value[key] = value
+    #             self.storage.move_to_front(node) # Most recently used, move to front
+    #             return
+    #         else:
+    #             node = node.next
+
+    #     # If the cache is already at the limit, delete the least recently used (tail)
+    #     if self.storage.length >= self.limit:
+    #         self.storage.remove_from_tail()
+        
+    #     # Add the key-value to the front of the storage
+    #     self.storage.add_to_head({key : value})
