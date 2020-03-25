@@ -1,5 +1,11 @@
 import sys
-sys.path.append('../doubly_linked_list')
+import os
+sys.path.append(
+    os.path.join(
+        os.path.dirname(__file__),
+        '../doubly_linked_list'
+        )
+    )
 from doubly_linked_list import DoublyLinkedList
 
 class Stack:
