@@ -35,7 +35,7 @@ class LRUCache:
     def get(self, key):
         if key in self.hashTable:
             self.storage.move_to_front(self.hashTable[key]) # Most recently used, move to front
-            return self.hashTable[key].value[key]
+            return self.hashTable[key].value[1]
         
         # key does not exist
         return None
@@ -55,18 +55,19 @@ class LRUCache:
 
         #  If the key-value is already in the storage, change the value
         if key in self.hashTable:
-            self.hashTable[key].value = {key : value}
+            self.hashTable[key].value = (key, value)
             self.storage.move_to_front(self.hashTable[key]) # Most recently used, move to front
             return
 
         # If the cache is already at the limit, delete the least recently used (tail)
         if self.storage.length >= self.limit:
-            k = list(self.storage.tail.value.keys())[0]
+            k = self.storage.tail.value[0]
             del self.hashTable[k]
             self.storage.remove_from_tail()
         
         # Add the key-value to the front of the storage
-        self.hashTable[key] = self.storage.add_to_head({key : value})
+        self.storage.add_to_head((key, value))
+        self.hashTable[key] = self.storage.head
 
 
     # def set(self, key, value):
