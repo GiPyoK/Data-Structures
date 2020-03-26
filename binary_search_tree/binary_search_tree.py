@@ -123,11 +123,11 @@ class BinarySearchTree:
         q = Queue()
         q.enqueue(root)
 
-        # loop untile queue is empty
+        # loop until the queue is empty
         while q.len() > 0:
             # grab the first item of the queue
             node = q.dequeue()
-            
+
             # print the first item and enqueue any children
             print(node.value)
             if node.left:
@@ -138,8 +138,24 @@ class BinarySearchTree:
 
     # Print the value of every node, starting with the given node,
     # in an iterative depth first traversal
-    def dft_print(self, node):
-        pass
+    def dft_print(self, root):
+        # create stack and push the root
+        stack = Stack()
+        stack.push(root)
+
+        # loop until the stack is empty
+        while stack.len() > 0:
+            node = stack.pop()
+
+            # print the last item and push and children
+            print(node.value)
+            if node.left:
+                stack.push(node.left)
+            if node.right:
+                stack.push(node.right)
+
+
+
 
     # STRETCH Goals -------------------------
     # Note: Research may be required
@@ -155,12 +171,12 @@ class BinarySearchTree:
 
 # test
 bst = BinarySearchTree(1)
-bst.insert(5)
 bst.insert(8)
+bst.insert(5)
 bst.insert(7)
 bst.insert(6)
 bst.insert(3)
 bst.insert(4)
 bst.insert(2)
 
-bst.in_order_print(bst)
+bst.dft_print(bst)
