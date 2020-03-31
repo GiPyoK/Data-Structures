@@ -61,8 +61,7 @@ class DoublyLinkedList:
             newNode.next = self.head
             self.head.prev = newNode
             self.head = newNode
-        return newNode
-
+            
     """Removes the List's current head node, making the
     current head's next node the new head of the List.
     Returns the value of the removed Node."""
